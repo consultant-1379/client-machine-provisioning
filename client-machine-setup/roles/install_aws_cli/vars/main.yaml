@@ -1,0 +1,7 @@
+---
+aws_system_user: aws_user
+aws_profile: default
+aws_access_key: "some_accesss_key"
+aws_secret_key: "some_secret_key"
+aws_region: eu-west-1
+aws_format: table

@@ -1,0 +1,45 @@
+---
+- name: Check AWS cli Version
+  shell: "/usr/local/bin/aws --version | head -n1 | grep {{ aws_cli_install_version }}"
+  failed_when: False
+  changed_when: False
+  register: aws_cli_version
+
+- name: Download AWS cli
+  get_url:
+    url: "{{ aws_cli_releases_url }}"
+    dest: "{{ aws_cli_download_destination }}"
+  when: aws_cli_version.rc != 0
+
+- name: Create AWS cli unzip dir
+  file:
+    path: "{{ aws_cli_unarchive_destination }}"
+    state: directory
+    mode: 0755
+  when: aws_cli_version.rc != 0
+
+- name: Unzip AWS cli
+  unarchive:
+    src: "{{ aws_cli_download_destination }}"
+    dest: "{{ aws_cli_unarchive_destination }}"
+    copy: no
+    creates: "{{ aws_cli_unarchive_destination }}/awscli-bundle"
+  changed_when: False
+  when: aws_cli_version.rc != 0
+
+- name: Install AWS cli
+  shell: "{{ aws_cli_unarchive_destination }}/awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws"
+  failed_when: False
+  changed_when: False
+  when: aws_cli_version.rc != 0
+
+- name: Configure AWS.
+  shell: "/usr/local/bin/aws configure set {{ item.key }} {{ item.value }} --profile {{ aws_profile }}"
+  no_log: True
+  with_dict:
+    aws_access_key_id: "{{ aws_access_key }}"
+    aws_secret_access_key: "{{ aws_secret_key }}"
+    region: "{{ aws_region }}"
+    format: "{{ aws_format }}"
+  become_user: "{{ aws_system_user }}"
+  changed_when: false

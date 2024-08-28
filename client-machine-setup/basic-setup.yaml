@@ -1,0 +1,11 @@
+---
+- hosts: all
+  gather_facts: False
+  pre_tasks:
+    - setup:
+        gather_subset: '!hardware,network,virtual,facter'
+  roles: 
+    - role: install_unzip
+    - role: install_terraform
+    - role: install_aws_cli 
+ 

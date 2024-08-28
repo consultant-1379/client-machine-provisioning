@@ -1,0 +1,8 @@
+---
+aws_cli_install_version: "0.16.109"
+aws_cli_download_destination: "/tmp/awscli-bundle.zip"
+
+aws_cli_unarchive_destination: "/tmp/aws_cli"
+
+aws_cli_releases_url: "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
+

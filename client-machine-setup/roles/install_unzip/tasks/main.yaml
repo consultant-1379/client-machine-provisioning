@@ -1,0 +1,4 @@
+- name: Install unzip to unarchive .zip files 
+  yum:
+    name: unzip
+    state: present
